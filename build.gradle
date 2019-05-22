@@ -32,9 +32,12 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.7")
     compile("org.springframework.boot:spring-boot-starter-jdbc:$springBootVersion")
+    compile("org.springframework.boot:spring-boot-starter-actuator:$springBootVersion")
+    // issue with version here. the version was too old so I had to use this one
     compile("mysql:mysql-connector-java:8.0.16")
     testCompile("org.mockito:mockito-core:2.23.4")
     testCompile("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
+
 
 }
 
@@ -42,13 +45,17 @@ def developmentDbUrl = "jdbc:mysql://localhost:3306/tracker_dev?user=tracker&use
 def testDbUrl = "jdbc:mysql://localhost:3306/tracker_test?user=tracker&useSSL=false&useTimezone=true&serverTimezone=UTC&useLegacyDatetimeCode=false"
 bootRun.environment([
         "WELCOME_MESSAGE": "Hello from the review environment",
-        "SPRING_DATASOURCE_URL": developmentDbUrl
+        "SPRING_DATASOURCE_URL": developmentDbUrl,
+        "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
+        "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
 
 ])
 
 test.environment([
         "WELCOME_MESSAGE": "Hello from test",
-        "SPRING_DATASOURCE_URL": testDbUrl
+        "SPRING_DATASOURCE_URL": testDbUrl,
+        "MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE": "*",
+        "MANAGEMENT_ENDPOINT_HEALTH_SHOWDETAILS": "always",
 ])
 
 
@@ -61,4 +68,8 @@ flyway {
 
 task testMigrate(type: FlywayMigrateTask) {
     url = testDbUrl
+}
+
+springBoot {
+    buildInfo()
 }

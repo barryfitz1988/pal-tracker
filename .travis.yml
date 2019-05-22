@@ -16,6 +16,7 @@ jobs:
         mariadb: '10.2'
       install: skip
       before_script:
+        - #permission issue
         - chmod +x gradlew
         - mysql -uroot < databases/tracker/create_databases.sql
         - curl https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/5.1.1/flyway-commandline-5.1.1-linux-x64.tar.gz | tar xvz
@@ -33,6 +34,7 @@ jobs:
     - stage: deploy to cf
       language: java
       before_install:
+        - #permission issue
         - chmod +x gradlew
         - chmod +x scripts/migrate-databases.sh
         - wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
