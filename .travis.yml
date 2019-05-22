@@ -1,5 +1,5 @@
 dist: trusty
-sudo: true
+sudo: required
 notifications:
   email: false
 env:
@@ -14,7 +14,7 @@ jobs:
       before_install: chmod +x gradlew
       addons:
         mariadb: '10.2'
-      install: gradle wrapper --gradle-version 4.2
+      install: skip
       before_script:
         - chmod +x gradlew
         - mysql -uroot < databases/tracker/create_databases.sql
